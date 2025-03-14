@@ -43,8 +43,8 @@ This system provides a comprehensive solution for managing properties and their 
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
-cd test_dev
+git clone https://github.com/robinjere/pms_rafikii.git
+cd pms_rafikii
 ```
 
 2. Set up environment variables:
@@ -63,6 +63,3 @@ The application will be available at:
 - Backend API: http://localhost:3001
 - MySQL: localhost:3306
 
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
