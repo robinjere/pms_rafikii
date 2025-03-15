@@ -1,4 +1,4 @@
-import { Property, Utility } from '../types/Property';
+import { Property, UtilityBill } from '../types/types';
 
 const API_BASE_URL = process.env.REACT_APP_BACKEND_API_BASE_URL;
 
@@ -40,7 +40,7 @@ export const createProperty = async (property: Omit<Property, 'id' | 'utilities'
   return response.json();
 };
 
-export const createUtilityBill = async (utility: Omit<Utility, 'id'>) => {
+export const createUtilityBill = async (utility: Omit<UtilityBill, 'id'>) => {
   const response = await fetch(`${API_BASE_URL}/utilities`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

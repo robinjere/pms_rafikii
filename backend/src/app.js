@@ -46,30 +46,21 @@ class App {
     this.app.use(cors());
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
-    
-    // Serve static files from the React app in production
-    if (process.env.NODE_ENV === 'production') {
-      this.app.use(express.static(path.join(__dirname, '../client/build')));
-    }
   }
 
   setupDependencies() {
-    // Repositories
     this.propertyRepository = new PropertyRepository();
     this.utilityRepository = new UtilityRepository();
     this.userRepository = new UserRepository();
-    
-    // Services (with dependency injection)
+
     this.utilityService = new UtilityService(this.utilityRepository, this.propertyRepository);
     this.propertyService = new PropertyService(this.propertyRepository, this.utilityService);
     this.authService = new AuthService(this.userRepository);
     
-    // Controllers (with dependency injection)
     this.propertyController = new PropertyController(this.propertyService);
     this.utilityController = new UtilityController(this.utilityService);
     this.authController = new AuthController(this.authService);
     
-    // Routes (with dependency injection)
     this.propertyRoutes = new PropertyRoutes(this.propertyController);
     this.utilityRoutes = new UtilityRoutes(this.utilityController);
     this.authRoutes = new AuthRoutes(this.authController);
@@ -79,23 +70,15 @@ class App {
   }
 
   setupRoutes() {
-    // Add auth routes before other routes
     this.app.use('/api/auth', this.authRoutes.getRouter());
-    
-    // API routes
     this.app.use('/api/properties', this.propertyRoutes.getRouter());
     this.app.use('/api/utilities', this.utilityRoutes.getRouter());
-    
-    // In production, serve the React app for any other request
-    if (process.env.NODE_ENV === 'production') {
-      this.app.get('*', (req, res) => {
-        res.sendFile(path.join(__dirname, '../client/build/index.html'));
-      });
-    }
+    this.app.get('/api/health', (req, res) => {
+      res.json({ status: 'ok' });
+    });
   }
 
   setupErrorHandling() {
-    // Error handling middleware must be the last middleware
     this.app.use(this.errorHandler.handleError);
   }
 }

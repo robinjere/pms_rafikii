@@ -1,5 +1,5 @@
 # Build stage
-FROM node:18.19.1-alpine as builder
+FROM node:18.19.1-alpine AS builder
 
 WORKDIR /app
 
@@ -41,4 +41,8 @@ COPY .env.example /usr/share/nginx/html/.env
 EXPOSE 80
 
 # Wait for backend to be ready before starting nginx
-CMD ["/bin/sh", "-c", "/wait-for-backend.sh backend:3001 -- nginx -g 'daemon off;'"]
+# CMD ["/bin/sh", "-c", "/wait-for-backend.sh backend:3001 -- nginx -g 'daemon off;'"]
+# CMD ["/bin/sh", "-c", "/wait-for-backend.sh backend:3001 -- exec nginx -g 'daemon off;'"]
+CMD ["/bin/sh", "-c", "/wait-for-backend.sh backend:3001"]
+
+# CMD /wait-for-backend.sh backend:3001 -- nginx -g 'daemon off;'

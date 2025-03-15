@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Property } from '../types/types';
 import debounce from 'lodash/debounce';
 
@@ -20,6 +20,7 @@ const PropertiesList: React.FC = () => {
   });
   const [sortBy, setSortBy] = useState('name');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const navigate = useNavigate();
 
   const fetchProperties = useCallback(async (search?: string, type?: string, page?: number) => {
     setLoading(true);
@@ -150,23 +151,21 @@ const PropertiesList: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {properties.length > 0 ? (
             properties.map((property) => (
-              <Link
-                to={`/properties/${property.id}`}
-                key={property.id}
-                className="block border rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
+              <div 
+                key={property.id} 
+                className="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+                onClick={() => navigate(`/properties/${property.id}`)}
               >
                 <div className="p-4">
                   <h2 className="text-xl font-semibold text-gray-800 mb-2">{property.name}</h2>
                   <p className="text-gray-600 mb-2">{property.address}</p>
                   <span className={`inline-block px-3 py-1 text-sm rounded-full ${
-                    property.type === 'residential'
-                      ? 'bg-green-100 text-green-800'
-                      : 'bg-purple-100 text-purple-800'
+                    property.type === 'residential' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'
                   }`}>
                     {property.type}
                   </span>
                 </div>
-              </Link>
+              </div>
             ))
           ) : (
             <div className="col-span-full text-center py-8">

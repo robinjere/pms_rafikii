@@ -12,4 +12,5 @@ until nc -z -v -w30 $(echo $host | cut -d: -f1) $(echo $host | cut -d: -f2); do
 done
 
 >&2 echo "Backend is up - executing command"
+nginx -g "daemon off;"
 exec $cmd

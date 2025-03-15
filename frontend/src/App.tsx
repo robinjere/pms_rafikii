@@ -120,13 +120,13 @@ const App: React.FC = () => {
           <Header />
           <main className="container mx-auto flex-grow py-6">
             <Routes>
+              <Route path="/" element={<Navigate to="/properties" replace />} />
+              <Route path="/properties" element={<PrivateRoute><PropertiesList /></PrivateRoute>} />
+              <Route path="/properties/new" element={<PrivateRoute><AddPropertyForm /></PrivateRoute>} />
+              <Route path="/properties/:id" element={<PrivateRoute><PropertyDetails /></PrivateRoute>} />
+              <Route path="/utilities/new" element={<PrivateRoute><AddUtilityBillForm /></PrivateRoute>} />
               <Route path="/login" element={<ProtectedAuthRoute><Login /></ProtectedAuthRoute>} />
               <Route path="/signup" element={<ProtectedAuthRoute><Signup /></ProtectedAuthRoute>} />
-              <Route path="/properties" element={<PrivateRoute><PropertiesList /></PrivateRoute>} />
-              <Route path="/properties/:id" element={<PrivateRoute><PropertyDetails /></PrivateRoute>} />
-              <Route path="/properties/new" element={<PrivateRoute><AddPropertyForm /></PrivateRoute>} />
-              <Route path="/utilities/new" element={<PrivateRoute><AddUtilityBillForm /></PrivateRoute>} />
-              <Route path="/" element={<Navigate to="/properties" replace />} />
             </Routes>
           </main>
           <footer className="mt-auto bg-white border-t py-4">

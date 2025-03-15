@@ -58,6 +58,20 @@ cp .env.example .env
 docker-compose up --build
 ```
 
+### Registration
+After starting the application:
+
+1. Open http://localhost:3000 in your browser
+2. Click "Sign up" to create a new account
+3. Fill in the registration form:
+   - Full Name
+   - Email Address
+   - Password
+4. Click "Create Account" to complete registration
+5. You will be automatically logged in and redirected to the properties dashboard
+
+Note: The first user to register will be assigned admin privileges.
+
 The application will be available at:
 - Frontend: http://localhost:3000
 - Backend API: http://localhost:3001
