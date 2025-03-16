@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
-  const [email, setEmail] = useState('');
+  const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -16,10 +16,10 @@ const Login: React.FC = () => {
     setIsLoading(true);
 
     try {
-      await login(email, password);
+      await login(identifier, password);
       navigate('/properties');
     } catch (err) {
-      setError('Invalid email or password');
+      setError('Invalid username/email or password');
     } finally {
       setIsLoading(false);
     }
@@ -42,12 +42,12 @@ const Login: React.FC = () => {
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
               <input
-                type="email"
+                type="text"
                 required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={identifier}
+                onChange={(e) => setIdentifier(e.target.value)}
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Email address"
+                placeholder="Username or Email"
               />
             </div>
             <div>

@@ -1,6 +1,6 @@
 -- Add default admin user (password is 'admin123')
-INSERT INTO users (email, password, full_name, role) VALUES
-('admin@example.com', '$2b$12$/R4oT9zCucUCqk/SGV.XbeuAVzaz3xVT7an/m1/RmdWyXcdInj4cO', 'System Administrator', 'admin');
+INSERT INTO users (username, email, password, full_name, role) VALUES
+('admin', 'admin@example.com', '$2b$12$/R4oT9zCucUCqk/SGV.XbeuAVzaz3xVT7an/m1/RmdWyXcdInj4cO', 'System Administrator', 'admin');
 
 -- Seed properties
 INSERT INTO properties (name, address, type) VALUES

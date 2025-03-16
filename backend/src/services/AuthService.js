@@ -9,6 +9,12 @@ class AuthService {
     }
 
     async signup(userData) {
+        if (!userData.username || userData.username.length < 3) {
+            const error = new Error('Username must be at least 3 characters long');
+            error.statusCode = 400;
+            throw error;
+        }
+
         // Validate email format
         if (!this.isValidEmail(userData.email)) {
             const error = new Error('Invalid email format');
@@ -17,9 +23,11 @@ class AuthService {
         }
 
         // Check if user already exists
-        const existingUser = await this.userRepository.findByEmail(userData.email);
+        const existingUser = await this.userRepository.findByEmailOrUsername(userData.email) 
+            || await this.userRepository.findByEmailOrUsername(userData.username);
+            
         if (existingUser) {
-            const error = new Error('Email already registered');
+            const error = new Error('Email or username already registered');
             error.statusCode = 409;
             throw error;
         }
@@ -30,6 +38,7 @@ class AuthService {
         // Create new user
         const user = new User(
             null,
+            userData.username,
             userData.email,
             hashedPassword,
             userData.fullName,
@@ -40,8 +49,8 @@ class AuthService {
         return this.generateAuthResponse(newUser);
     }
 
-    async login(email, password) {
-        const user = await this.userRepository.findByEmail(email);
+    async login(identifier, password) {
+        const user = await this.userRepository.findByEmailOrUsername(identifier);
         if (!user) {
             const error = new Error('Invalid credentials');
             error.statusCode = 401;

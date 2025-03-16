@@ -1,6 +1,7 @@
 class User {
-    constructor(id, email, password, fullName, role = 'user') {
+    constructor(id, username, email, password, fullName, role = 'user') {
         this.id = id;
+        this.username = username;
         this.email = email;
         this.password = password;
         this.fullName = fullName;
@@ -10,6 +11,7 @@ class User {
     static fromDatabase(row) {
         return new User(
             row.id,
+            row.username,
             row.email,
             row.password,
             row.full_name,
@@ -20,6 +22,7 @@ class User {
     toDatabase() {
         return {
             id: this.id,
+            username: this.username,
             email: this.email,
             password: this.password,
             full_name: this.fullName,
@@ -30,6 +33,7 @@ class User {
     toJSON() {
         return {
             id: this.id,
+            username: this.username,
             email: this.email,
             fullName: this.fullName,
             role: this.role

@@ -2,6 +2,7 @@ import React, { createContext, useState, useContext, useCallback, useEffect } fr
 
 interface User {
   id: string;
+  username: string;
   email: string;
   fullName: string;
   role: string;
@@ -18,6 +19,7 @@ interface AuthContextType {
 }
 
 interface SignupData {
+  username: string;
   email: string;
   password: string;
   fullName: string;
