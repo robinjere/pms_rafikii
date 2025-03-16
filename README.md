@@ -69,7 +69,7 @@ Or create a new account:
    - Email Address (must be valid format)
    - Password (minimum 8 characters, must include uppercase, lowercase, and numbers)
 3. Click "Sign up" to complete registration
-4. Verify your email address through the verification link (development environment skips this step)
+4. You will be redirected to Properties Page
 
 The application will be available at:
 - Frontend: http://localhost:3000
