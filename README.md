@@ -19,7 +19,6 @@ This system provides a comprehensive solution for managing properties and their 
 - **User Management**
   - Secure authentication system
   - Role-based access control
-  - User profile management
 
 ## Tech Stack
 
@@ -38,6 +37,7 @@ This system provides a comprehensive solution for managing properties and their 
 ### Prerequisites
 - Docker >= 20.10.0
 - Docker Compose >= 2.0.0
+- Node.js >= 18.x
 
 ### Docker Setup
 
@@ -47,33 +47,128 @@ git clone https://github.com/robinjere/pms_rafikii.git
 cd pms_rafikii
 ```
 
-2. Set up environment variables:
-```bash
-cp .env.example .env
-# Edit .env file with your configurations
-```
-
-3. Build and start containers:
+2. Build and start containers:
 ```bash
 docker-compose up --build
 ```
 
-### Registration
+### Authentication
 After starting the application:
 
 1. Open http://localhost:3000 in your browser
-2. Click "Sign up" to create a new account
-3. Fill in the registration form:
-   - Full Name
-   - Email Address
-   - Password
-4. Click "Create Account" to complete registration
-5. You will be automatically logged in and redirected to the properties dashboard
+2. Use the default admin credentials:
+   - Email: admin@rafikii.com or Username: admin
+   - Password: admin123
 
-Note: The first user to register will be assigned admin privileges.
+Or create a new account:
+
+1. Click "Sign up" to create a new account
+2. Fill in the registration form:
+   - Full Name
+   - Username
+   - Email Address (must be valid format)
+   - Password (minimum 8 characters, must include uppercase, lowercase, and numbers)
+3. Click "Sign up" to complete registration
+4. Verify your email address through the verification link (development environment skips this step)
 
 The application will be available at:
 - Frontend: http://localhost:3000
 - Backend API: http://localhost:3001
-- MySQL: localhost:3306
 
+## API Documentation
+
+### Authentication Endpoints
+
+#### POST /api/auth/signup
+Create a new user account
+```json
+{
+  "username": "johndoe",
+  "email": "user@example.com",
+  "password": "Password123",
+  "fullName": "John Doe"
+}
+```
+
+#### POST /api/auth/login
+Authenticate user (using email or username)
+```json
+{
+  "identifier": "johndoe",
+  "password": "Password123"
+}
+```
+
+### Property Endpoints
+
+#### GET /api/properties
+Get all properties with optional search params:
+- term: search term
+- type: residential|commercial
+- page: page number
+- limit: items per page
+- sortBy: name|type|address
+- sortOrder: asc|desc
+
+#### GET /api/properties/:id
+Get property details with utilities
+
+#### POST /api/properties
+Create new property
+```json
+{
+  "name": "Property Name",
+  "address": "123 Street",
+  "type": "residential"
+}
+```
+
+#### PUT /api/properties/:id
+Update property
+```json
+{
+  "name": "Updated Name",
+  "address": "456 Avenue",
+  "type": "commercial"
+}
+```
+
+#### DELETE /api/properties/:id
+Delete property and associated utilities
+
+### Utility Endpoints
+
+#### GET /api/utilities/:propertyId
+Get utilities for a property with optional params:
+- page: page number
+- limit: items per page
+- sortBy: type|amount|date
+- sortOrder: asc|desc
+
+#### POST /api/utilities
+Create new utility bill
+```json
+{
+  "propertyId": "123",
+  "type": "electricity",
+  "amount": 150.50,
+  "date": "2024-03-01"
+}
+```
+
+#### GET /api/utilities/bill/:id
+Get utility bill details
+
+#### PUT /api/utilities/bill/:id
+Update utility bill
+```json
+{
+  "propertyId": "123",
+  "type": "water",
+  "amount": 75.25,
+  "date": "2024-03-01"
+}
+```
+
+#### DELETE /api/utilities/bill/:id
+Delete utility bill

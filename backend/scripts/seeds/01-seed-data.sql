@@ -1,6 +1,6 @@
 -- Add default admin user (password is 'admin123')
 INSERT INTO users (username, email, password, full_name, role) VALUES
-('admin', 'admin@example.com', '$2b$12$/R4oT9zCucUCqk/SGV.XbeuAVzaz3xVT7an/m1/RmdWyXcdInj4cO', 'System Administrator', 'admin');
+('admin', 'admin@rafikii.com', '$2b$12$/R4oT9zCucUCqk/SGV.XbeuAVzaz3xVT7an/m1/RmdWyXcdInj4cO', 'System Administrator', 'admin');
 
 -- Seed properties
 INSERT INTO properties (name, address, type) VALUES
@@ -13,7 +13,7 @@ INSERT INTO properties (name, address, type) VALUES
 -- Seed utilities
 -- For Kivukoni Apartments (ID: 1)
 INSERT INTO utilities (property_id, type, amount, date) VALUES
-(1, 'electricity', 250000.00, '2024-01-15'), -- Amount in TZS
+(1, 'electricity', 250000.00, '2024-01-15'),
 (1, 'water', 120000.00, '2024-01-15'),
 (1, 'gas', 80000.00, '2024-01-15'),
 (1, 'electricity', 245000.00, '2024-02-15'),
@@ -31,7 +31,7 @@ INSERT INTO utilities (property_id, type, amount, date) VALUES
 
 -- For Kariakoo Market Complex (ID: 3)
 INSERT INTO utilities (property_id, type, amount, date) VALUES
-(3, 'electricity', 1200000.00, '2024-01-05'), -- Commercial property utilities are higher
+(3, 'electricity', 1200000.00, '2024-01-05'),
 (3, 'water', 300000.00, '2024-01-05'),
 (3, 'gas', 400000.00, '2024-01-05'),
 (3, 'electricity', 1220000.00, '2024-02-05'),
