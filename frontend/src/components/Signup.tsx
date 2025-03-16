@@ -13,10 +13,34 @@ const Signup: React.FC = () => {
   });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [passwordError, setPasswordError] = useState('');
+
+  const validatePassword = (password: string): boolean => {
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumber = /\d/.test(password);
+    const isLongEnough = password.length >= 8;
+
+    if (!isLongEnough) {
+      setPasswordError('Password must be at least 8 characters long');
+      return false;
+    }
+    if (!hasUpperCase || !hasLowerCase || !hasNumber) {
+      setPasswordError('Password must include uppercase, lowercase, and numbers');
+      return false;
+    }
+    setPasswordError('');
+    return true;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    
+    if (!validatePassword(formData.password)) {
+      return;
+    }
+    
     setIsLoading(true);
 
     try {
@@ -30,10 +54,15 @@ const Signup: React.FC = () => {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
+    
+    if (name === 'password') {
+      validatePassword(value);
+    }
   };
 
   return (
@@ -92,9 +121,16 @@ const Signup: React.FC = () => {
                 required
                 value={formData.password}
                 onChange={handleChange}
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                className={`appearance-none rounded-none relative block w-full px-3 py-2 border ${
+                  passwordError ? 'border-red-300' : 'border-gray-300'
+                } placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm`}
                 placeholder="Password"
               />
+              {passwordError && (
+                <p className="mt-2 text-sm text-red-600">
+                  {passwordError}
+                </p>
+              )}
             </div>
           </div>
 

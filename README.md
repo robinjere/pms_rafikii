@@ -172,3 +172,35 @@ Update utility bill
 
 #### DELETE /api/utilities/bill/:id
 Delete utility bill
+
+## Database Schema
+
+The database schema consists of the following tables:
+
+### Users
+- **id**: Primary key, auto-increment
+- **username**: Unique username
+- **email**: Unique email address
+- **password**: Hashed password
+- **fullName**: Full name of the user
+- **role**: Role of the user (e.g., admin, manager, user)
+- **createdAt**: Timestamp of account creation
+- **updatedAt**: Timestamp of last update
+
+### Properties
+- **id**: Primary key, auto-increment
+- **name**: Name of the property
+- **address**: Address of the property
+- **type**: Type of property (residential or commercial)
+- **status**: Status of the property (e.g., available, occupied)
+- **createdAt**: Timestamp of property creation
+- **updatedAt**: Timestamp of last update
+
+### Utilities
+- **id**: Primary key, auto-increment
+- **propertyId**: Foreign key referencing Properties table
+- **type**: Type of utility (e.g., electricity, water, gas)
+- **amount**: Amount of utility consumption
+- **date**: Date of utility bill
+- **createdAt**: Timestamp of utility bill creation
+- **updatedAt**: Timestamp of last update
