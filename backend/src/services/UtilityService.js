@@ -23,7 +23,6 @@ class UtilityService {
   async createUtility(utilityData) {
     this.validateUtilityData(utilityData);
     
-    // Check if property exists
     const property = await this.propertyRepository.findById(utilityData.propertyId);
     if (!property) {
       const error = new Error('Property not found');
@@ -45,10 +44,8 @@ class UtilityService {
   async updateUtility(id, utilityData) {
     this.validateUtilityData(utilityData);
     
-    // Check if utility exists
     await this.getUtilityById(id);
     
-    // Check if property exists
     const property = await this.propertyRepository.findById(utilityData.propertyId);
     if (!property) {
       const error = new Error('Property not found');
@@ -68,24 +65,9 @@ class UtilityService {
   }
 
   async deleteUtility(id) {
-    // Check if utility exists
     await this.getUtilityById(id);
-    
     await this.utilityRepository.delete(id);
-    
     return { message: 'Utility bill deleted successfully' };
-  }
-
-  async deleteUtilitiesByPropertyId(propertyId) {
-    // This would be better implemented as a database-level cascade delete,
-    // but we're handling it in the service for completeness
-    const utilities = await this.getUtilitiesByPropertyId(propertyId);
-    
-    for (const utility of utilities) {
-      await this.utilityRepository.delete(utility.id);
-    }
-    
-    return { message: 'All utility bills for the property deleted successfully' };
   }
 
   validateUtilityData(data) {

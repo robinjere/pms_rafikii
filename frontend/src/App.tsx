@@ -7,6 +7,8 @@ import PropertiesList from './components/PropertyList';
 import PropertyDetails from './components/PropertyDetails';
 import AddPropertyForm from './components/AddPropertyForm';
 import AddUtilityBillForm from './components/AddUtilityBillForm';
+import EditPropertyForm from './components/EditPropertyForm';
+import EditUtilityBillForm from './components/EditUtilityBillForm';
 
 const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuth();
@@ -124,7 +126,9 @@ const App: React.FC = () => {
               <Route path="/properties" element={<PrivateRoute><PropertiesList /></PrivateRoute>} />
               <Route path="/properties/new" element={<PrivateRoute><AddPropertyForm /></PrivateRoute>} />
               <Route path="/properties/:id" element={<PrivateRoute><PropertyDetails /></PrivateRoute>} />
+              <Route path="/properties/edit/:id" element={<PrivateRoute><EditPropertyForm /></PrivateRoute>} />
               <Route path="/utilities/new" element={<PrivateRoute><AddUtilityBillForm /></PrivateRoute>} />
+              <Route path="/utilities/edit/:id" element={<PrivateRoute><EditUtilityBillForm /></PrivateRoute>} />
               <Route path="/login" element={<ProtectedAuthRoute><Login /></ProtectedAuthRoute>} />
               <Route path="/signup" element={<ProtectedAuthRoute><Signup /></ProtectedAuthRoute>} />
             </Routes>

@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Property } from '../types/types';
 import debounce from 'lodash/debounce';
+import ConfirmDialog from './ConfirmDialog';
+import { deleteProperty } from '../utils/api';
 
 const API_BASE_URL = process.env.REACT_APP_BACKEND_API_BASE_URL;
 console.log('REACT_APP_BACKEND_API_BASE_URL: ', process.env.REACT_APP_BACKEND_API_BASE_URL);
@@ -20,6 +22,10 @@ const PropertiesList: React.FC = () => {
   });
   const [sortBy, setSortBy] = useState('name');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [deleteConfirm, setDeleteConfirm] = useState<{ isOpen: boolean; propertyId: string | null }>({
+    isOpen: false,
+    propertyId: null
+  });
   const navigate = useNavigate();
 
   const fetchProperties = useCallback(async (search?: string, type?: string, page?: number) => {
@@ -79,6 +85,24 @@ const PropertiesList: React.FC = () => {
 
   const handleSortOrderToggle = () => {
     setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+  };
+
+  const handleDelete = async (propertyId: string, event: React.MouseEvent) => {
+    event.stopPropagation();
+    setDeleteConfirm({ isOpen: true, propertyId });
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!deleteConfirm.propertyId) return;
+    
+    try {
+      await deleteProperty(deleteConfirm.propertyId);
+      fetchProperties(searchTerm, filter, pagination.page);
+    } catch (error) {
+      console.error('Error deleting property:', error);
+    } finally {
+      setDeleteConfirm({ isOpen: false, propertyId: null });
+    }
   };
 
   return (
@@ -157,7 +181,26 @@ const PropertiesList: React.FC = () => {
                 onClick={() => navigate(`/properties/${property.id}`)}
               >
                 <div className="p-4">
-                  <h2 className="text-xl font-semibold text-gray-800 mb-2">{property.name}</h2>
+                  <div className="flex justify-between items-start">
+                    <h2 className="text-xl font-semibold text-gray-800 mb-2">{property.name}</h2>
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/properties/edit/${property.id}`);
+                        }}
+                        className="text-blue-600 hover:text-blue-800"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={(e) => handleDelete(property.id, e)}
+                        className="text-red-600 hover:text-red-800"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
                   <p className="text-gray-600 mb-2">{property.address}</p>
                   <span className={`inline-block px-3 py-1 text-sm rounded-full ${
                     property.type === 'residential' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'
@@ -195,6 +238,14 @@ const PropertiesList: React.FC = () => {
           Next
         </button>
       </div>
+
+      <ConfirmDialog
+        isOpen={deleteConfirm.isOpen}
+        title="Delete Property"
+        message="Are you sure you want to delete this property? This will also delete all associated utility bills."
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setDeleteConfirm({ isOpen: false, propertyId: null })}
+      />
     </div>
   );
 };

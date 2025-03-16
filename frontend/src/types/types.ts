@@ -64,4 +64,13 @@ export interface PropertySearchParams extends PaginationParams {
 
 export interface UtilitySearchParams extends PaginationParams {
   propertyId: string;
+  type?: 'electricity' | 'water' | 'gas';
+}
+
+export interface UtilitySearchResponse {
+  items: UtilityBill[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
 }

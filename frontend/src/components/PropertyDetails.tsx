@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Property, ChartDataItem, UtilityBill } from '../types/types';
+import ConfirmDialog from './ConfirmDialog';
+import { deleteUtility } from '../utils/api';
 
 const API_BASE_URL = process.env.REACT_APP_BACKEND_API_BASE_URL;
 
@@ -19,6 +21,10 @@ const PropertyDetails: React.FC = () => {
   });
   const [sortBy, setSortBy] = useState('date');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+  const [deleteConfirm, setDeleteConfirm] = useState<{ isOpen: boolean; utilityId: string | null }>({
+    isOpen: false,
+    utilityId: null
+  });
 
   const fetchUtilities = async () => {
     try {
@@ -64,6 +70,23 @@ const PropertyDetails: React.FC = () => {
   useEffect(() => {
     if (id) fetchUtilities();
   }, [id, pagination.page, sortBy, sortOrder]);
+
+  const handleDeleteUtility = (utilityId: string) => {
+    setDeleteConfirm({ isOpen: true, utilityId });
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!deleteConfirm.utilityId) return;
+    
+    try {
+      await deleteUtility(deleteConfirm.utilityId);
+      fetchUtilities();
+    } catch (error) {
+      console.error('Error deleting utility:', error);
+    } finally {
+      setDeleteConfirm({ isOpen: false, utilityId: null });
+    }
+  };
 
   // Prepare chart data
   const getChartData = (): ChartDataItem[] => {
@@ -188,8 +211,9 @@ const PropertyDetails: React.FC = () => {
               <thead>
                 <tr className="bg-gray-100">
                   <th className="py-2 px-4 text-left text-gray-600">Type</th>
-                  <th className="py-2 px-4 text-left text-gray-600">Amount</th>
+                  <th className="py-2 px-4 text-left text-gray-600">Amount (TZS)</th>
                   <th className="py-2 px-4 text-left text-gray-600">Date</th>
+                  <th className="py-2 px-4 text-left text-gray-600">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -206,9 +230,25 @@ const PropertyDetails: React.FC = () => {
                         {utility.type}
                       </span>
                     </td>
-                    <td className="py-2 px-4">${utility.amount.toFixed(2)}</td>
+                    <td className="py-2 px-4">{utility.amount.toFixed(2)}</td>
                     <td className="py-2 px-4">
                       {new Date(utility.date).toLocaleDateString()}
+                    </td>
+                    <td className="py-2 px-4">
+                      <div className="flex space-x-2">
+                        <Link
+                          to={`/utilities/edit/${utility.id}`}
+                          className="text-blue-500 hover:text-blue-700"
+                        >
+                          Edit
+                        </Link>
+                        <button
+                          onClick={() => handleDeleteUtility(utility.id)}
+                          className="text-red-600 hover:text-red-800"
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -257,6 +297,14 @@ const PropertyDetails: React.FC = () => {
           </ResponsiveContainer>
         </div>
       )}
+
+      <ConfirmDialog
+        isOpen={deleteConfirm.isOpen}
+        title="Delete Utility Bill"
+        message="Are you sure you want to delete this utility bill?"
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setDeleteConfirm({ isOpen: false, utilityId: null })}
+      />
     </div>
   );
 };

@@ -21,7 +21,6 @@ class UtilityRepository {
       sql += ' LIMIT ? OFFSET ?';
       params.push(limit, offset);
 
-      // Execute both queries
       const [rows, [countResult]] = await Promise.all([
         database.query(sql, params),
         database.query(countSql, [propertyId])

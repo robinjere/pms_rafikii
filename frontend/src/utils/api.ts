@@ -49,3 +49,56 @@ export const createUtilityBill = async (utility: Omit<UtilityBill, 'id'>) => {
   if (!response.ok) throw new Error('Failed to create utility bill');
   return response.json();
 };
+
+export const updateProperty = async (id: string, property: Omit<Property, 'id' | 'utilities'>) => {
+  const response = await fetch(`${API_BASE_URL}/properties/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(property)
+  });
+  if (!response.ok) throw new Error('Failed to update property');
+  return response.json();
+};
+
+export const deleteProperty = async (id: string) => {
+  const response = await fetch(`${API_BASE_URL}/properties/${id}`, {
+    method: 'DELETE'
+  });
+  if (!response.ok) throw new Error('Failed to delete property');
+  return response.json();
+};
+
+export const updateUtility = async (id: string, utility: Omit<UtilityBill, 'id'>) => {
+  const response = await fetch(`${API_BASE_URL}/utilities/bill/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(utility)
+  });
+  if (!response.ok) throw new Error('Failed to update utility bill');
+  return response.json();
+};
+
+export const deleteUtility = async (id: string) => {
+  const response = await fetch(`${API_BASE_URL}/utilities/bill/${id}`, {
+    method: 'DELETE'
+  });
+  if (!response.ok) throw new Error('Failed to delete utility bill');
+  return response.json();
+};
+
+export const fetchUtilities = async (propertyId: string, params?: {
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+}) => {
+  const queryParams = new URLSearchParams();
+  if (params?.page) queryParams.append('page', params.page.toString());
+  if (params?.limit) queryParams.append('limit', params.limit.toString());
+  if (params?.sortBy) queryParams.append('sortBy', params.sortBy);
+  if (params?.sortOrder) queryParams.append('sortOrder', params.sortOrder);
+
+  const response = await fetch(`${API_BASE_URL}/properties/${propertyId}/utilities?${queryParams}`);
+  if (!response.ok) throw new Error('Failed to fetch utilities');
+  return response.json();
+};

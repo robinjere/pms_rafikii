@@ -11,7 +11,6 @@ describe('Utility API Endpoints', () => {
     await TestDatabase.initialize();
     app = await new App().initialize();
     
-    // Get auth token and create test property
     const authResponse = await request(app)
       .post('/api/auth/login')
       .send({ email: 'admin@example.com', password: 'admin123' });
