@@ -26,7 +26,7 @@ const UtilityRoutes = require('./routes/utilityRoutes');
 const AuthRoutes = require('./routes/authRoutes');
 
 // Middleware
-const ErrorHandler = require('./middleware/errorHandler');
+const errorHandler = require('./middleware/errorHandler');
 
 class App {
   constructor() {
@@ -64,9 +64,6 @@ class App {
     this.propertyRoutes = new PropertyRoutes(this.propertyController);
     this.utilityRoutes = new UtilityRoutes(this.utilityController);
     this.authRoutes = new AuthRoutes(this.authController);
-    
-    // Error handler
-    this.errorHandler = new ErrorHandler();
   }
 
   setupRoutes() {
@@ -79,7 +76,7 @@ class App {
   }
 
   setupErrorHandling() {
-    this.app.use(this.errorHandler.handleError);
+    this.app.use(errorHandler);
   }
 }
 

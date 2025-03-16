@@ -1,4 +1,5 @@
 const Utility = require('../models/Utility');
+const UtilityRepository = require('../repositories/UtilityRepository');
 
 class UtilityService {
   constructor(utilityRepository, propertyRepository) {
@@ -73,25 +74,20 @@ class UtilityService {
   validateUtilityData(data) {
     const errors = [];
     
-    if (!data.propertyId) {
-      errors.push('Property ID is required');
-    }
-    
     if (!data.type || !['electricity', 'water', 'gas'].includes(data.type)) {
-      errors.push('Utility type must be one of: electricity, water, gas');
+      errors.push('Utility type must be electricity, water, or gas');
     }
     
-    if (data.amount === undefined || data.amount === null || isNaN(data.amount) || data.amount <= 0) {
+    if (!data.amount || isNaN(data.amount) || data.amount <= 0) {
       errors.push('Utility amount must be a positive number');
     }
     
-    if (!data.date) {
-      errors.push('Date is required');
-    } else {
-      const dateObj = new Date(data.date);
-      if (isNaN(dateObj.getTime())) {
-        errors.push('Invalid date format');
-      }
+    if (!data.date || !this.isValidDate(data.date)) {
+      errors.push('Valid date is required');
+    }
+    
+    if (!data.propertyId) {
+      errors.push('Property ID is required');
     }
     
     if (errors.length > 0) {
@@ -99,6 +95,11 @@ class UtilityService {
       error.statusCode = 400;
       throw error;
     }
+  }
+
+  isValidDate(dateString) {
+    const date = new Date(dateString);
+    return date instanceof Date && !isNaN(date);
   }
 }
 
