@@ -1,8 +1,0 @@
-**/node_modules
-**/build
-**/.git
-**/.env
-**/npm-debug.log
-**/coverage
-**/.vscode
-**/.idea

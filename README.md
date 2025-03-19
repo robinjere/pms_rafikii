@@ -35,25 +35,10 @@ This system provides a comprehensive solution for managing properties and their 
 ## Setup Instructions
 
 ### Prerequisites
-- Docker >= 20.10.0
-- Docker Compose >= 2.0.0
 - Node.js >= 18.x
-- MySQL >= 8.0 (if not using Docker)
-
-### Docker Setup
-
-1. Clone the repository:
-```bash
-git clone https://github.com/robinjere/pms_rafikii.git
-cd pms_rafikii
-```
-
-2. Build and start containers:
-```bash
-docker-compose up --build
-```
-
-### Manual Setup (Without Docker)
+- MySQL >= 8.0 
+  
+### Manual Setup
 
 1. Clone the repository:
 ```bash
