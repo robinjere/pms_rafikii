@@ -1,4 +1,3 @@
-CREATE DATABASE IF NOT EXISTS property_management;
 USE property_management;
 
 CREATE TABLE IF NOT EXISTS properties (

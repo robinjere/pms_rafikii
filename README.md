@@ -38,6 +38,7 @@ This system provides a comprehensive solution for managing properties and their 
 - Docker >= 20.10.0
 - Docker Compose >= 2.0.0
 - Node.js >= 18.x
+- MySQL >= 8.0 (if not using Docker)
 
 ### Docker Setup
 
@@ -50,6 +51,55 @@ cd pms_rafikii
 2. Build and start containers:
 ```bash
 docker-compose up --build
+```
+
+### Manual Setup (Without Docker)
+
+1. Clone the repository:
+```bash
+git clone https://github.com/robinjere/pms_rafikii.git
+cd pms_rafikii
+```
+
+2. Install dependencies for the backend:
+```bash
+cd backend
+npm install
+```
+
+3. Configure the database:
+   - Create a MySQL database
+   - Copy `.env.example` to `.env` and update database credentials for both the backend and frontend.
+
+4. Initialize the database:
+```bash
+# RUnning MySQL migration scripts
+mysql -u root -p < backend/scripts/migrations/00-init-user.sql
+mysql -u root -p < backend/scripts/migrations/01-create-tables.sql
+mysql -u root -p < backend/scripts/migrations/02-create-auth-tables.sql
+
+# DB User Credential
+DB_USER = pms_user
+DB_PASSWORD = root123
+
+# Seed initial data
+mysql -u root -p property_management < backend/scripts/seeds/01-seed-data.sql
+```
+
+5. Start the backend server:
+```bash
+npm start
+```
+
+6. Install dependencies for the frontend:
+```bash
+cd ../frontend
+npm install
+```
+
+7. Start the frontend server:
+```bash
+npm start
 ```
 
 ### Authentication
